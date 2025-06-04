@@ -63,17 +63,17 @@ def calculate_average_salaries(languages):
             predict_rub_salary(vacancy)
             for vacancy in vacancies
         ]
-        filtered = [salary for salary in salaries if salary]
+        valid_salaries = [salary for salary in salaries if salary]
 
-        if filtered:
-            average = int(sum(filtered) / len(filtered))
+        if valid_salaries:
+            calculated_average = int(sum(valid_salaries) / len(valid_salaries))
         else:
-            average = 0
+            calculated_average = 0
 
         statistics[language] = {
             'vacancies_found': total_found,
-            'vacancies_processed': len(filtered),
-            'average_salary': average
+            'vacancies_processed': len(valid_salaries),
+            'average_salary': calculated_average
         }
 
     return statistics
