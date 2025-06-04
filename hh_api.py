@@ -1,6 +1,9 @@
 import requests
 from terminaltables import AsciiTable
 
+MOSCOW_AREA_ID = 1
+SEARCH_PERIOD_DAYS = 30
+HH_PAGE_SIZE = 100
 
 def fetch_vacancies(language):
     url = 'https://api.hh.ru/vacancies'
@@ -10,9 +13,9 @@ def fetch_vacancies(language):
     while True:
         params = {
             'text': f'Программист {language}',
-            'area': 1,
-            'period': 30,
-            'per_page': 100,
+            'area': MOSCOW_AREA_ID,
+            'period': SEARCH_PERIOD_DAYS,
+            'per_page': HH_PAGE_SIZE,
             'page': page
         }
         reply = requests.get(url, params=params, timeout=10)

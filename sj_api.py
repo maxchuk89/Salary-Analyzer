@@ -3,17 +3,16 @@ import requests
 from dotenv import load_dotenv
 from terminaltables import AsciiTable
 
-
 load_dotenv()
-superjob_key = os.getenv('SUPERJOB_API_KEY')
 
+SJ_DEVELOPMENT_CATALOGUE_ID = 48
+SJ_PAGE_SIZE = 100
+
+superjob_key = os.getenv('SUPERJOB_API_KEY')
 
 def fetch_all_vacancies(language):
     url = 'https://api.superjob.ru/2.0/vacancies/'
-    headers = {
-        'X-Api-App-Id': superjob_key
-    }
-
+    headers = {'X-Api-App-Id': superjob_key}
     page = 0
     vacancies = []
 
@@ -21,8 +20,8 @@ def fetch_all_vacancies(language):
         params = {
             'keyword': f'Программист {language}',
             'town': 'Москва',
-            'catalogues': 48,
-            'count': 100,
+            'catalogues': SJ_DEVELOPMENT_CATALOGUE_ID,
+            'count': SJ_PAGE_SIZE,
             'page': page
         }
         reply = requests.get(url, headers=headers, params=params, timeout=10)
@@ -37,7 +36,6 @@ def fetch_all_vacancies(language):
         page += 1
 
     return vacancies, response['total']
-
 
 def predict_rub_salary_for_superJob(vacancy):
     if vacancy['currency'] != 'rub':
@@ -54,7 +52,6 @@ def predict_rub_salary_for_superJob(vacancy):
         return end * 0.8
 
     return None
-
 
 def calculate_average_salaries_superjob(languages):
     statistics = {}
@@ -81,7 +78,6 @@ def calculate_average_salaries_superjob(languages):
 
     return statistics
 
-
 def print_salary_table(statistics, title):
     table_data = [
         ['Язык программирования', 'Вакансий найдено', 'Вакансий обработано', 'Средняя зарплата']
@@ -98,7 +94,6 @@ def print_salary_table(statistics, title):
 
     table = AsciiTable(table_data, title)
     print(table.table)
-
 
 if __name__ == '__main__':
     languages = ['Python', 'Java', 'C++', 'C#', 'JavaScript', 'Ruby', 'Go', '1C']
