@@ -78,9 +78,3 @@ def calculate_average_salaries(languages):
         }
 
     return statistics
-
-
-if __name__ == '__main__':
-    languages = ['Python', 'Java', 'C++', 'C#', 'JavaScript', 'Ruby', 'Go', '1C']
-    stats = calculate_average_salaries(languages)
-    print_salary_table(stats, 'HeadHunter Moscow')
