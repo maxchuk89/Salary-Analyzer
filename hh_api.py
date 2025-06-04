@@ -5,6 +5,17 @@ MOSCOW_AREA_ID = 1
 SEARCH_PERIOD_DAYS = 30
 HH_PAGE_SIZE = 100
 
+
+def predict_salary_from_range(start, end):
+    if start and end:
+        return (start + end) / 2
+    if start:
+        return start * 1.2
+    if end:
+        return end * 0.8
+    return None
+
+
 def fetch_vacancies(language):
     url = 'https://api.hh.ru/vacancies'
     vacancies = []
@@ -39,15 +50,7 @@ def predict_rub_salary(vacancy):
 
     start = salary.get('from')
     end = salary.get('to')
-
-    if start and end:
-        return (start + end) / 2
-    if start:
-        return start * 1.2
-    if end:
-        return end * 0.8
-
-    return None
+    return predict_salary_from_range(start, end)
 
 
 def calculate_average_salaries(languages):

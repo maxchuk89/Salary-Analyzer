@@ -37,6 +37,15 @@ def fetch_all_vacancies(language):
 
     return vacancies, response['total']
 
+def predict_salary_from_range(salary_from, salary_to):
+    if salary_from and salary_to:
+        return (salary_from + salary_to) / 2
+    if salary_from:
+        return salary_from * 1.2
+    if salary_to:
+        return salary_to * 0.8
+    return None
+
 def predict_rub_salary_for_superJob(vacancy):
     if vacancy['currency'] != 'rub':
         return None
@@ -44,14 +53,7 @@ def predict_rub_salary_for_superJob(vacancy):
     start = vacancy['payment_from']
     end = vacancy['payment_to']
 
-    if start and end:
-        return (start + end) / 2
-    if start:
-        return start * 1.2
-    if end:
-        return end * 0.8
-
-    return None
+    return predict_salary_from_range(start, end)
 
 def calculate_average_salaries_superjob(languages):
     statistics = {}
