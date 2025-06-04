@@ -63,7 +63,7 @@ def calculate_average_salaries(languages):
             predict_rub_salary(vacancy)
             for vacancy in vacancies
         ]
-        filtered = [salary for salary in salaries if salary is not None]
+        filtered = [salary for salary in salaries if salary]
 
         if filtered:
             average = int(sum(filtered) / len(filtered))

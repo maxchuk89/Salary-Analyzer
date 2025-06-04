@@ -10,6 +10,7 @@ SJ_PAGE_SIZE = 100
 
 superjob_key = os.getenv('SUPERJOB_API_KEY')
 
+
 def fetch_all_vacancies(language):
     url = 'https://api.superjob.ru/2.0/vacancies/'
     headers = {'X-Api-App-Id': superjob_key}
@@ -37,6 +38,7 @@ def fetch_all_vacancies(language):
 
     return vacancies, response['total']
 
+
 def predict_salary_from_range(salary_from, salary_to):
     if salary_from and salary_to:
         return (salary_from + salary_to) / 2
@@ -46,6 +48,7 @@ def predict_salary_from_range(salary_from, salary_to):
         return salary_to * 0.8
     return None
 
+
 def predict_rub_salary_for_superJob(vacancy):
     if vacancy['currency'] != 'rub':
         return None
@@ -54,6 +57,7 @@ def predict_rub_salary_for_superJob(vacancy):
     end = vacancy['payment_to']
 
     return predict_salary_from_range(start, end)
+
 
 def calculate_average_salaries_superjob(languages):
     statistics = {}
@@ -65,7 +69,7 @@ def calculate_average_salaries_superjob(languages):
             predict_rub_salary_for_superJob(vacancy)
             for vacancy in vacancies
         ]
-        filtered = [salary for salary in salaries if salary is not None]
+        filtered = [salary for salary in salaries if salary]
 
         if filtered:
             average = int(sum(filtered) / len(filtered))
@@ -79,6 +83,7 @@ def calculate_average_salaries_superjob(languages):
         }
 
     return statistics
+
 
 def print_salary_table(statistics, title):
     table_data = [
@@ -96,6 +101,7 @@ def print_salary_table(statistics, title):
 
     table = AsciiTable(table_data, title)
     print(table.table)
+
 
 if __name__ == '__main__':
     languages = ['Python', 'Java', 'C++', 'C#', 'JavaScript', 'Ruby', 'Go', '1C']
