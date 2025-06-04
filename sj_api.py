@@ -1,7 +1,8 @@
 import os
 import requests
 from dotenv import load_dotenv
-from terminaltables import AsciiTable
+
+from salary_table import print_salary_table
 
 load_dotenv()
 
@@ -83,24 +84,6 @@ def calculate_average_salaries_superjob(languages):
         }
 
     return statistics
-
-
-def print_salary_table(statistics, title):
-    table_data = [
-        ['Язык программирования', 'Вакансий найдено', 'Вакансий обработано', 'Средняя зарплата']
-    ]
-
-    for language, info in statistics.items():
-        row = [
-            language,
-            info['vacancies_found'],
-            info['vacancies_processed'],
-            info['average_salary']
-        ]
-        table_data.append(row)
-
-    table = AsciiTable(table_data, title)
-    print(table.table)
 
 
 if __name__ == '__main__':

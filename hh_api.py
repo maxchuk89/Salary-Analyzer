@@ -1,5 +1,6 @@
 import requests
-from terminaltables import AsciiTable
+
+from salary_table import print_salary_table
 
 MOSCOW_AREA_ID = 1
 SEARCH_PERIOD_DAYS = 30
@@ -77,24 +78,6 @@ def calculate_average_salaries(languages):
         }
 
     return statistics
-
-
-def print_salary_table(statistics, title):
-    table_data = [
-        ['Язык программирования', 'Найдено вакансий', 'Обработано вакансий', 'Средняя зарплата']
-    ]
-
-    for language, info in statistics.items():
-        row = [
-            language,
-            info['vacancies_found'],
-            info['vacancies_processed'],
-            info['average_salary']
-        ]
-        table_data.append(row)
-
-    table = AsciiTable(table_data, title)
-    print(table.table)
 
 
 if __name__ == '__main__':

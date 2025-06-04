@@ -9,7 +9,7 @@ if __name__ == '__main__':
     hh_stats = calculate_hh(languages)
     print_salary_table(hh_stats, 'HeadHunter Moscow')
 
-    print()  # пустая строка
+    print()
 
     sj_stats = calculate_sj(languages)
     print_salary_table(sj_stats, 'SuperJob Moscow')
