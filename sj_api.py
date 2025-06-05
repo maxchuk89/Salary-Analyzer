@@ -2,12 +2,14 @@ import os
 import requests
 from dotenv import load_dotenv
 
+from salary_prediction import predict_salary_from_range
 from salary_table import print_salary_table
+
+load_dotenv()
+superjob_key = os.getenv('SUPERJOB_API_KEY')
 
 SJ_DEVELOPMENT_CATALOGUE_ID = 48
 SJ_PAGE_SIZE = 100
-
-superjob_key = None
 
 
 def fetch_all_vacancies(language):
@@ -36,16 +38,6 @@ def fetch_all_vacancies(language):
         page += 1
 
     return vacancies, response['total']
-
-
-def predict_salary_from_range(salary_from, salary_to):
-    if salary_from and salary_to:
-        return (salary_from + salary_to) / 2
-    if salary_from:
-        return salary_from * 1.2
-    if salary_to:
-        return salary_to * 0.8
-    return None
 
 
 def predict_rub_salary_for_superJob(vacancy):
@@ -85,9 +77,6 @@ def calculate_average_salaries_superjob(languages):
 
 
 if __name__ == '__main__':
-    load_dotenv()
-    superjob_key = os.getenv('SUPERJOB_API_KEY')
-
     languages = ['Python', 'Java', 'C++', 'C#', 'JavaScript', 'Ruby', 'Go', '1C']
     stats = calculate_average_salaries_superjob(languages)
     print_salary_table(stats, 'SuperJob Moscow')

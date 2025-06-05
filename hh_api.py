@@ -1,20 +1,11 @@
 import requests
 
+from salary_prediction import predict_salary_from_range
 from salary_table import print_salary_table
 
 MOSCOW_AREA_ID = 1
 SEARCH_PERIOD_DAYS = 30
 HH_PAGE_SIZE = 100
-
-
-def predict_salary_from_range(start, end):
-    if start and end:
-        return (start + end) / 2
-    if start:
-        return start * 1.2
-    if end:
-        return end * 0.8
-    return None
 
 
 def fetch_vacancies(language):
@@ -78,3 +69,9 @@ def calculate_average_salaries(languages):
         }
 
     return statistics
+
+
+if __name__ == '__main__':
+    languages = ['Python', 'Java', 'C++', 'C#', 'JavaScript', 'Ruby', 'Go', '1C']
+    stats = calculate_average_salaries(languages)
+    print_salary_table(stats, 'HeadHunter Moscow')
