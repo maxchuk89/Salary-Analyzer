@@ -1,6 +1,6 @@
 from hh_api import calculate_average_salaries as calculate_hh
 from sj_api import calculate_average_salaries_superjob as calculate_sj
-from sj_api import print_salary_table
+from salary_table import print_salary_table
 
 
 if __name__ == '__main__':
