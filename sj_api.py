@@ -63,20 +63,14 @@ def calculate_average_salaries_superjob(languages):
         valid_salaries = [salary for salary in salaries if salary]
 
         if valid_salaries:
-            calculated_average = int(sum(valid_salaries) / len(valid_salaries))
+            average_salary = int(sum(valid_salaries) / len(valid_salaries))
         else:
-            calculated_average = 0
+            average_salary = 0
 
         statistics[language] = {
             'vacancies_found': found,
             'vacancies_processed': len(valid_salaries),
-            'average_salary': calculated_average
+            'average_salary': average_salary
         }
 
     return statistics
-
-
-if __name__ == '__main__':
-    languages = ['Python', 'Java', 'C++', 'C#', 'JavaScript', 'Ruby', 'Go', '1C']
-    stats = calculate_average_salaries_superjob(languages)
-    print_salary_table(stats, 'SuperJob Moscow')
