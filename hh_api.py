@@ -1,7 +1,5 @@
 import requests
-
 from salary_prediction import predict_salary_from_range
-from salary_table import print_salary_table
 
 MOSCOW_AREA_ID = 1
 SEARCH_PERIOD_DAYS = 30

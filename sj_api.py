@@ -1,9 +1,7 @@
 import os
 import requests
 from dotenv import load_dotenv
-
 from salary_prediction import predict_salary_from_range
-from salary_table import print_salary_table
 
 load_dotenv()
 SUPERJOB_API_KEY = os.getenv('SUPERJOB_API_KEY')
