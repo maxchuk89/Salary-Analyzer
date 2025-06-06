@@ -1,56 +1,57 @@
+import os
 import requests
 from salary_prediction import predict_salary_from_range
 
-MOSCOW_AREA_ID = 1
-SEARCH_PERIOD_DAYS = 30
-HH_PAGE_SIZE = 100
+SJ_DEVELOPMENT_CATALOGUE_ID = 48
+SJ_PAGE_SIZE = 100
 
 
-def fetch_vacancies(language):
-    url = 'https://api.hh.ru/vacancies'
-    vacancies = []
+def fetch_all_vacancies(language, api_key, catalogue_id, page_size):
+    url = 'https://api.superjob.ru/2.0/vacancies/'
+    headers = {'X-Api-App-Id': api_key}
     page = 0
+    vacancies = []
 
     while True:
         params = {
-            'text': f'Программист {language}',
-            'area': MOSCOW_AREA_ID,
-            'period': SEARCH_PERIOD_DAYS,
-            'per_page': HH_PAGE_SIZE,
+            'keyword': f'Программист {language}',
+            'town': 'Москва',
+            'catalogues': catalogue_id,
+            'count': page_size,
             'page': page
         }
-        reply = requests.get(url, params=params, timeout=10)
+        reply = requests.get(url, headers=headers, params=params, timeout=10)
         reply.raise_for_status()
-        page_data = reply.json()
+        response = reply.json()
 
-        vacancies.extend(page_data['items'])
+        vacancies.extend(response['objects'])
 
-        if page >= page_data['pages'] - 1:
+        if not response['more']:
             break
 
         page += 1
 
-    return vacancies, page_data['found']
+    return vacancies, response['total']
 
 
-def predict_rub_salary(vacancy):
-    salary = vacancy.get('salary')
-    if not salary or salary.get('currency') != 'RUR':
+def predict_rub_salary_for_superJob(vacancy):
+    if vacancy['currency'] != 'rub':
         return None
 
-    start = salary.get('from')
-    end = salary.get('to')
+    start = vacancy['payment_from']
+    end = vacancy['payment_to']
+
     return predict_salary_from_range(start, end)
 
 
-def calculate_average_salaries(languages):
+def calculate_average_salaries_superjob(languages, api_key, catalogue_id, page_size):
     statistics = {}
 
     for language in languages:
-        vacancies, total_found = fetch_vacancies(language)
+        vacancies, found = fetch_all_vacancies(language, api_key, catalogue_id, page_size)
 
         salaries = [
-            predict_rub_salary(vacancy)
+            predict_rub_salary_for_superJob(vacancy)
             for vacancy in vacancies
         ]
         valid_salaries = [salary for salary in salaries if salary]
@@ -61,9 +62,26 @@ def calculate_average_salaries(languages):
             average_salary = 0
 
         statistics[language] = {
-            'vacancies_found': total_found,
+            'vacancies_found': found,
             'vacancies_processed': len(valid_salaries),
             'average_salary': average_salary
         }
 
     return statistics
+
+
+if __name__ == '__main__':
+    from dotenv import load_dotenv
+    from salary_table import print_salary_table
+
+    load_dotenv()
+    SUPERJOB_API_KEY = os.getenv('SUPERJOB_API_KEY')
+
+    languages = ['Python', 'Java', 'C++', 'C#', 'JavaScript', 'Ruby', 'Go', '1C']
+    stats = calculate_average_salaries_superjob(
+        languages,
+        SUPERJOB_API_KEY,
+        SJ_DEVELOPMENT_CATALOGUE_ID,
+        SJ_PAGE_SIZE
+    )
+    print_salary_table(stats, 'SuperJob Moscow')
