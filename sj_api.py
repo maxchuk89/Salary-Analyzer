@@ -1,10 +1,7 @@
 import os
 import requests
-from dotenv import load_dotenv
-from salary_prediction import predict_salary_from_range
 
-load_dotenv()
-SUPERJOB_API_KEY = os.getenv('SUPERJOB_API_KEY')
+from salary_prediction import predict_salary_from_range
 
 SJ_DEVELOPMENT_CATALOGUE_ID = 48
 SJ_PAGE_SIZE = 100
@@ -72,3 +69,20 @@ def calculate_average_salaries_superjob(languages, api_key, catalogue_id, page_s
         }
 
     return statistics
+
+
+if __name__ == '__main__':
+    from dotenv import load_dotenv
+    from salary_table import print_salary_table
+
+    load_dotenv()
+    SUPERJOB_API_KEY = os.getenv('SUPERJOB_API_KEY')
+
+    languages = ['Python', 'Java', 'C++', 'C#', 'JavaScript', 'Ruby', 'Go', '1C']
+    stats = calculate_average_salaries_superjob(
+        languages,
+        SUPERJOB_API_KEY,
+        SJ_DEVELOPMENT_CATALOGUE_ID,
+        SJ_PAGE_SIZE
+    )
+    print_salary_table(stats, 'SuperJob Moscow')
